@@ -4,6 +4,7 @@ import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Scheduler;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ItemController {
     @PostMapping
     List<Item> searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
 
-        Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType=
+        Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType =
                 breakRequestByItemTypes(itemsSearchRequest);
 
         //TODO:
@@ -39,15 +40,19 @@ public class ItemController {
         // or service method searchItems with the list  singleItemSearch
         // whatever is the best suitable to make all calls asynchronous
 
-//        Flux.fromIterable(searchRequestByItemType.entrySet())
-//                .
+        Flux.fromIterable(searchRequestByItemType.entrySet())
+                .flatMap(e ->
+                        getService(e.getKey()).searchItems(e.getValue()))
+                // .subscribeOn(Scheduler) How to make sure all searchItems are called parallel
+                .blockLast();
 
-        return null; // just for compilation
+
+        return null;
     }
 
     private Map<ItemType, List<SingleItemSearchRequest>> breakRequestByItemTypes(final ItemsSearchRequest isr) {
 
-       return isr
+        return isr
                 .getItemIdentifiers()
                 .stream()
                 .map(e -> SingleItemSearchRequest
@@ -56,10 +61,17 @@ public class ItemController {
                         .isAddYYYDetails(isr.isAddYYYDetails())
                         .isAddXXXDetails(isr.isAddXXXDetails())
                         .build())
-                .collect(Collectors.groupingBy(e->e.getItemIdentifiers().getItemType()));
+                .collect(Collectors.groupingBy(e -> e.getItemIdentifiers().getItemType()));
 
 
     }
 
+    private ItemSearchService getService(final ItemType itemType) {
+        return itemSearchServices
+                .stream()
+                .filter(e -> e.supportedItem() == itemType)
+                .findFirst()
+                .orElse(null);
+    }
 
 }
