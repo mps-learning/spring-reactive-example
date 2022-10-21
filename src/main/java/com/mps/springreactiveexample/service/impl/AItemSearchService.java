@@ -4,8 +4,8 @@ import com.mps.springreactiveexample.MockBackendApi;
 import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 import java.util.List;
 
@@ -34,10 +34,14 @@ public class AItemSearchService implements ItemSearchService {
     @Override
     public Mono<Item> searchItem(SingleItemSearchRequest sisr) {
 
-        //TODO: how to make these XXX YYY calls conditionals ?
+        //TODO: how to make these XXX YYY calls conditionals In clear way?
         return Mono.zip(mockBackendApi.getItemANameApi(sisr.getItemIdentifiers().getItemId()),
-                        mockBackendApi.getItemAXXXApi(sisr.getItemIdentifiers().getItemId()),
-                        mockBackendApi.getItemAYYYApi(sisr.getItemIdentifiers().getItemId()))
+                        sisr.isAddXXXDetails()
+                        ?mockBackendApi.getItemAXXXApi(sisr.getItemIdentifiers().getItemId())
+                        :Mono.empty(),
+                        sisr.isAddYYYDetails()
+                        ?mockBackendApi.getItemAYYYApi(sisr.getItemIdentifiers().getItemId())
+                        :Mono.empty())
                 .map(tuple3 -> Item.builder()
                         .name(tuple3.getT1())
                         .xxxDetails(tuple3.getT2())
@@ -46,13 +50,5 @@ public class AItemSearchService implements ItemSearchService {
                 );
     }
 
-    @Override
-    public Flux<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //TODO:  Hwo to call the search for each item parallel ?
 
-        //        Flux.fromIterable(requests)
-        //                .map(this::searchItem)
-        //                .??
-        return null;
-    }
 }

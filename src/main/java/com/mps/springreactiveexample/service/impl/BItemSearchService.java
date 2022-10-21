@@ -29,10 +29,14 @@ public class BItemSearchService implements ItemSearchService {
     //TODO: all these calls need to be asynchronous.
     @Override
     public Mono<Item> searchItem(SingleItemSearchRequest sisr) {
-        //TODO: how to make these XXX YYY calls conditionals ?
+        //TODO: how to make these XXX YYY calls conditionals In clear way?
         return Mono.zip(mockBackendApi.getItemBNameApi(sisr.getItemIdentifiers().getItemId()),
-                        mockBackendApi.getItemBXXXApi(sisr.getItemIdentifiers().getItemId()),
-                        mockBackendApi.getItemBYYYApi(sisr.getItemIdentifiers().getItemId()))
+                        sisr.isAddXXXDetails()
+                        ?mockBackendApi.getItemBXXXApi(sisr.getItemIdentifiers().getItemId())
+                        :Mono.empty(),
+                        sisr.isAddYYYDetails()
+                        ?mockBackendApi.getItemBYYYApi(sisr.getItemIdentifiers().getItemId())
+                        :Mono.empty())
                 .map(tuple3 -> Item.builder()
                         .name(tuple3.getT1())
                         .xxxDetails(tuple3.getT2())
@@ -41,13 +45,5 @@ public class BItemSearchService implements ItemSearchService {
                 );
     }
 
-    @Override
-    public Flux<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //TODO:  Hwo to call the search for each item parallel ?
 
-        //        Flux.fromIterable(requests)
-        //                .map(this::searchItem)
-        //                .??
-        return null;
-    }
 }

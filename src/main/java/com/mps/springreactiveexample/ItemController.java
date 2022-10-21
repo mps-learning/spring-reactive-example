@@ -4,7 +4,7 @@ import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class ItemController {
     }
 
     @PostMapping
-    List<Item> searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
+    List<Item>   searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
 
         Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType =
                 breakRequestByItemTypes(itemsSearchRequest);
@@ -40,14 +40,15 @@ public class ItemController {
         // or service method searchItems with the list  singleItemSearch
         // whatever is the best suitable to make all calls asynchronous
 
-        Flux.fromIterable(searchRequestByItemType.entrySet())
+        Flux<Item> itemFlux = Flux.fromIterable(searchRequestByItemType.entrySet())
                 .flatMap(e ->
                         getService(e.getKey()).searchItems(e.getValue()))
-                // .subscribeOn(Scheduler) How to make sure all searchItems are called parallel
-                .blockLast();
+                .subscribeOn(Schedulers.boundedElastic());
 
+        List<Item>  listMono = itemFlux.collectList().block();
 
-        return null;
+        return listMono;
+        // .subscribeOn(Scheduler) How to make sure all searchItems are called parallel
     }
 
     private Map<ItemType, List<SingleItemSearchRequest>> breakRequestByItemTypes(final ItemsSearchRequest isr) {
