@@ -27,18 +27,18 @@ public class ItemController {
     }
 
     @PostMapping
-    List<Item>   searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
+    List<Item>  searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
 
         Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType =
                 breakRequestByItemTypes(itemsSearchRequest);
 
         //TODO:
         // need some magical code here to do all the operations asynchronous
-        // we have one service auto wierd for each ItemType (each entry of above hashMap)
-        // we can call
-        // either service method searchItem with one singleItemSearch object or
-        // or service method searchItems with the list  singleItemSearch
-        // whatever is the best suitable to make all calls asynchronous
+        // I have one service auto wierd for each ItemType (each entry in above hashMap)
+        // From controller we will call SearchService:searchItems() passing the list of singleItemSearchReq for that ItemType
+        // Goal is to call all services asynchronously
+
+        //Below code doesn't work
 
         Flux<Item> itemFlux = Flux.fromIterable(searchRequestByItemType.entrySet())
                 .flatMap(e ->
@@ -48,7 +48,6 @@ public class ItemController {
         List<Item>  listMono = itemFlux.collectList().block();
 
         return listMono;
-        // .subscribeOn(Scheduler) How to make sure all searchItems are called parallel
     }
 
     private Map<ItemType, List<SingleItemSearchRequest>> breakRequestByItemTypes(final ItemsSearchRequest isr) {
