@@ -4,6 +4,7 @@ import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ItemController {
     }
 
     @PostMapping
-    List<Item>  searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
+    List<Item> searchItems(@RequestBody ItemsSearchRequest itemsSearchRequest) {
 
         Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType =
                 breakRequestByItemTypes(itemsSearchRequest);
@@ -39,15 +40,14 @@ public class ItemController {
         // Goal is to call all services asynchronously
 
         //Below code doesn't work
+        System.out.println("Inside Controller with thread " + Thread.currentThread().toString());
 
-        Flux<Item> itemFlux = Flux.fromIterable(searchRequestByItemType.entrySet())
+        return Flux.fromIterable(searchRequestByItemType.entrySet())
                 .flatMap(e ->
                         getService(e.getKey()).searchItems(e.getValue()))
-                .subscribeOn(Schedulers.boundedElastic());
-
-        List<Item>  listMono = itemFlux.collectList().block();
-
-        return listMono;
+                .subscribeOn(Schedulers.boundedElastic())
+                .collectList()
+                .block();
     }
 
     private Map<ItemType, List<SingleItemSearchRequest>> breakRequestByItemTypes(final ItemsSearchRequest isr) {

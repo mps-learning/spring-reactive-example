@@ -33,6 +33,7 @@ public class AItemSearchService implements ItemSearchService {
     //TODO: all these calls need to be asynchronous.
     @Override
     public Mono<Item> searchItem(SingleItemSearchRequest sisr) {
+        System.out.println("\t\tInside "+supportedItem()+" searchItem with thread " + Thread.currentThread().toString());
 
         //TODO: how to make these XXX YYY calls conditionals In clear way?
         return Mono.zip(mockBackendApi.getItemANameApi(sisr.getItemIdentifiers().getItemId()),

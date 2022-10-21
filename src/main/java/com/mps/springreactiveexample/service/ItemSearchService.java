@@ -24,8 +24,9 @@ public interface ItemSearchService {
 
 
     default Flux<Item> searchItems(List<SingleItemSearchRequest> requests) {
+         System.out.println("\tInside "+supportedItem()+" searchItemS with thread " + Thread.currentThread().toString());
 
-        return Flux.fromIterable(requests)
+         return Flux.fromIterable(requests)
                 .flatMap(this::searchItem)
                 .subscribeOn(Schedulers.boundedElastic());
     }
