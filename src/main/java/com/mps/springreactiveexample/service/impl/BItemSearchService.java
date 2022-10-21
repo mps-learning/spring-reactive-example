@@ -24,27 +24,24 @@ public class BItemSearchService implements ItemSearchService {
         return ItemType.B;
     }
     //TODO: all these calls need to be asynchronous.
-    // Idea is to use Mono/Flux
     @Override
     public Mono<Item> searchItem(SingleItemSearchRequest sisr) {
-        Item item = Item
-                .builder()
-                .name(mockBackendApi.getItemBNameApi(sisr.getItemIdentifiers().getItemId()))
-                .xxxDetails(sisr.isAddXXXDetails()
-                            ? mockBackendApi.getItemBXXXApi(sisr.getItemIdentifiers().getItemId())
-                            : null)
-                .yyyDetails(sisr.isAddYYYDetails()
-                            ? mockBackendApi.getItemBYYYApi(sisr.getItemIdentifiers().getItemId())
-                            : null)
-                .build();
-
-
-        return Mono.just(item);
+        //TODO: how to make these XXX YYY calls conditionals ?
+        return Mono.zip(mockBackendApi.getItemBNameApi(sisr.getItemIdentifiers().getItemId()),
+                        mockBackendApi.getItemBXXXApi(sisr.getItemIdentifiers().getItemId()),
+                        mockBackendApi.getItemBYYYApi(sisr.getItemIdentifiers().getItemId()))
+                .map(tuple3 -> Item.builder()
+                        .name(tuple3.getT1())
+                        .xxxDetails(tuple3.getT2())
+                        .yyyDetails(tuple3.getT3())
+                        .build()
+                );
     }
 
     @Override
     public Mono<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //can use above method to make async calls to 3 backends
+        //TODO:  Hwo to call the search for each item paralally ?
+
         return null;
     }
 }

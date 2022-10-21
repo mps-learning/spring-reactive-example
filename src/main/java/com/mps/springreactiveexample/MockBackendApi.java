@@ -1,6 +1,7 @@
 package com.mps.springreactiveexample;
 
 import com.mps.springreactiveexample.model.ItemType;
+import reactor.core.publisher.Mono;
 
 import java.util.Random;
 
@@ -12,40 +13,40 @@ import java.util.Random;
  **/
 public class MockBackendApi {
 
-    public String getItemANameApi(long id) {
-        return "A_" + generateRandomString();
+    public Mono<String> getItemANameApi(long id) {
+        return Mono.just("A_" + generateRandomString());
     }
 
-    public String getItemBNameApi(long id) {
-        return "B_" + generateRandomString();
+    public Mono<String> getItemBNameApi(long id) {
+        return Mono.just("B_" + generateRandomString());
     }
 
-    public String getItemCNameApi(long id) {
-        return "C_" + generateRandomString();
+    public Mono<String> getItemCNameApi(long id) {
+        return Mono.just("C_" + generateRandomString());
     }
 
-    public String getItemAXXXApi(long id) {
-        return "A_XXX_" + generateRandomString();
+    public Mono<String> getItemAXXXApi(long id) {
+        return Mono.just("A_XXX_" + generateRandomString());
     }
 
-    public String getItemBXXXApi(long id) {
-        return "B_XXX_" + generateRandomString();
+    public Mono<String> getItemBXXXApi(long id) {
+        return Mono.just("B_XXX_" + generateRandomString());
     }
 
-    public String getItemCXXXApi(long id) {
-        return "C_XXX_" + generateRandomString();
+    public Mono<String> getItemCXXXApi(long id) {
+        return Mono.just("C_XXX_" + generateRandomString());
     }
 
-    public String getItemAYYYApi(long id) {
-        return "A_YYY_" + generateRandomString();
+    public Mono<String> getItemAYYYApi(long id) {
+        return Mono.just("A_YYY_" + generateRandomString());
     }
 
-    public String getItemBYYYApi(long id) {
-        return "B_YYY_" + generateRandomString();
+    public Mono<String> getItemBYYYApi(long id) {
+        return Mono.just("B_YYY_" + generateRandomString());
     }
 
-    public String getItemCYYYApi(long id) {
-        return "C_YYY_" + generateRandomString();
+    public Mono<String> getItemCYYYApi(long id) {
+        return Mono.just("C_YYY_" + generateRandomString());
     }
 
 

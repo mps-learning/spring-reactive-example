@@ -3,6 +3,7 @@ package com.mps.springreactiveexample.service.impl;
 import com.mps.springreactiveexample.MockBackendApi;
 import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -28,27 +29,25 @@ public class AItemSearchService implements ItemSearchService {
     }
 
     //TODO: all these calls need to be asynchronous.
-    // Idea is to use Mono/Flux
     @Override
     public Mono<Item> searchItem(SingleItemSearchRequest sisr) {
-        Item item = Item
-                .builder()
-                .name(mockBackendApi.getItemANameApi(sisr.getItemIdentifiers().getItemId()))
-                .xxxDetails(sisr.isAddXXXDetails()
-                            ? mockBackendApi.getItemAXXXApi(sisr.getItemIdentifiers().getItemId())
-                            : null)
-                .yyyDetails(sisr.isAddYYYDetails()
-                            ? mockBackendApi.getItemAYYYApi(sisr.getItemIdentifiers().getItemId())
-                            : null)
-                .build();
 
-
-        return Mono.just(item);
+        //TODO: how to make these XXX YYY calls conditionals ?
+        return Mono.zip(mockBackendApi.getItemANameApi(sisr.getItemIdentifiers().getItemId()),
+                        mockBackendApi.getItemAXXXApi(sisr.getItemIdentifiers().getItemId()),
+                        mockBackendApi.getItemAYYYApi(sisr.getItemIdentifiers().getItemId()))
+                .map(tuple3 -> Item.builder()
+                        .name(tuple3.getT1())
+                        .xxxDetails(tuple3.getT2())
+                        .yyyDetails(tuple3.getT3())
+                        .build()
+                );
     }
 
     @Override
     public Mono<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //can use above method to make async calls to 3 backends
+        //TODO:  Hwo to call the search for each item paralally ?
+
         return null;
     }
 }
