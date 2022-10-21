@@ -3,6 +3,7 @@ package com.mps.springreactiveexample.service.impl;
 import com.mps.springreactiveexample.MockBackendApi;
 import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -39,9 +40,12 @@ public class BItemSearchService implements ItemSearchService {
     }
 
     @Override
-    public Mono<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //TODO:  Hwo to call the search for each item paralally ?
+    public Flux<Item> searchItems(List<SingleItemSearchRequest> requests) {
+        //TODO:  Hwo to call the search for each item parallel ?
 
+        //        Flux.fromIterable(requests)
+        //                .map(this::searchItem)
+        //                .??
         return null;
     }
 }

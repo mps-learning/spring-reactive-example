@@ -1,6 +1,7 @@
 package com.mps.springreactiveexample.service;
 
 import com.mps.springreactiveexample.model.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ItemSearchService {
     //Call any one of the following 2 implementations from controller
     // basic idea is to make ALL calls asynchronously and zip/merge responses later
     Mono<Item> searchItem(SingleItemSearchRequest request);
-    Mono<Item> searchItems(List<SingleItemSearchRequest> requests);
+    Flux<Item> searchItems(List<SingleItemSearchRequest> requests);
 }
 
 

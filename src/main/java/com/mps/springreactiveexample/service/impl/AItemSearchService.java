@@ -45,9 +45,12 @@ public class AItemSearchService implements ItemSearchService {
     }
 
     @Override
-    public Mono<Item> searchItems(List<SingleItemSearchRequest> requests) {
-        //TODO:  Hwo to call the search for each item paralally ?
+    public Flux<Item> searchItems(List<SingleItemSearchRequest> requests) {
+        //TODO:  Hwo to call the search for each item parallel ?
 
+        //        Flux.fromIterable(requests)
+        //                .map(this::searchItem)
+        //                .??
         return null;
     }
 }
