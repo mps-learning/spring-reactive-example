@@ -30,13 +30,13 @@ public class ItemController {
         Map<ItemType, List<SingleItemSearchRequest>> searchRequestByItemType=
                 breakRequestByItemTypes(itemsSearchRequest);
 
-        //TODO: need some magical code here to do all the operations asynchronous
+        //TODO:
+        // need some magical code here to do all the operations asynchronous
         // we have one service auto wierd for each ItemType (each entry of above hashMap)
         // we can call
         // either service method searchItem with one singleItemSearch object or
         // or service method searchItems with the list  singleItemSearch
-
-        //whatever the best suitable to make all calls asynchronous
+        // whatever is the best suitable to make all calls asynchronous
 
         return null; // just for compilation
     }
