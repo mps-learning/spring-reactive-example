@@ -1,6 +1,6 @@
 package com.mps.springreactiveexample;
 
-import com.mps.springreactiveexample.model.ItemType;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Random;
@@ -11,6 +11,7 @@ import java.util.Random;
  * <p>
  * </p>
  **/
+@Component
 public class MockBackendApi {
 
     public Mono<String> getItemANameApi(long id) {

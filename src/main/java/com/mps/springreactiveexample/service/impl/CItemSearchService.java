@@ -3,6 +3,7 @@ package com.mps.springreactiveexample.service.impl;
 import com.mps.springreactiveexample.MockBackendApi;
 import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * <p>
  * </p>
  **/
+@Service
 public class CItemSearchService implements ItemSearchService {
 
     final MockBackendApi mockBackendApi;
