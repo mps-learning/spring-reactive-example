@@ -3,6 +3,7 @@ package com.mps.springreactiveexample;
 import com.mps.springreactiveexample.model.*;
 import com.mps.springreactiveexample.service.ItemSearchService;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,9 @@ public class ItemController {
         // either service method searchItem with one singleItemSearch object or
         // or service method searchItems with the list  singleItemSearch
         // whatever is the best suitable to make all calls asynchronous
+
+//        Flux.fromIterable(searchRequestByItemType.entrySet())
+//                .
 
         return null; // just for compilation
     }
