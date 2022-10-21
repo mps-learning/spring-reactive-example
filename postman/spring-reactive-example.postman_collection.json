@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "5008a007-6ce0-4d75-a5ba-7c4fec8d62bf",
+		"name": "spring-reactive-example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5481001"
+	},
+	"item": [
+		{
+			"name": "multiple-item-search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"itemIdentifiers\": [\n        {\n            \"itemId\": \"12\",\n            \"itemType\": \"A\"\n        },\n        {\n            \"itemId\": \"54\",\n            \"itemType\": \"B\"\n        },\n        {\n            \"itemId\": \"45\",\n            \"itemType\": \"B\"\n        },\n        {\n            \"itemId\": \"43\",\n            \"itemType\": \"C\"\n        },\n        {\n            \"itemId\": \"11\",\n            \"itemType\": \"A\"\n        },\n        {\n            \"itemId\": \"23\",\n            \"itemType\": \"C\"\n        }\n    ],\n\n\"isAddXXXDetails\": \"false\",\n    \"isAddYYYDetails\": \"false\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/items",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
